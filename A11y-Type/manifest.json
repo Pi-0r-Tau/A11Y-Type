@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "A11Y Type",
+  "version": "0.1.0",
+  "description": "Accessible typing assistance for any text field",
+  "permissions": [
+    "storage"
+  ],
+  "options_page": "settings/options.html",
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/config.js",
+        "src/state.js",
+        "src/dictionary-manager.js",
+        "src/overlay.js",
+        "src/fields.js",
+        "src/content-main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dictionaries/dictionary-en.txt",
+        "dictionaries/common-words-rank.txt"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
