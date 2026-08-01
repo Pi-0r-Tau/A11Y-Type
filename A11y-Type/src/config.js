@@ -14,6 +14,9 @@
         commonRankFile: "dictionaries/common-words-rank.txt",
         correctionsFile: "dictionaries/compounds-auto-en-uk.txt"
     };
+    // C002: Need to review "dpek" prefix as its referencing  the original prototype name
+    // but not really a massive problem as of yet. Probs will keep it until it confuses me and I panic about why I have a random code word in here
+    // local storage for user config settings
     const SETTINGS_STORAGE_KEY = "dpekSettings";
     const ADVANCED_SETTINGS_STORAGE_KEY = "dpekAdvancedSettings";
     const defaultSettings = {
