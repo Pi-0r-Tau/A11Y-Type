@@ -30,6 +30,8 @@
     {
       "resources": [
         "dictionaries/dictionary-en.txt",
+        "dictionaries/dictionary-en-uk-contractions-diacritics.txt",
+        "dictionaries/compounds-auto-en-uk.txt",
         "dictionaries/common-words-rank.txt"
       ],
       "matches": [
