@@ -67,6 +67,10 @@
 
     const bubble = document.createElement("div");
     bubble.className = "dpek-bubble";
+    // WCAG fail but for testing this is going to be a purely visual assistance. Need to get software to test fully and get working correctly so probs like Dragon or Read and Write or even just read aloud stuff
+    // But want to have whole sprint dedicated to visually impaired  users
+    // Will also explore the usage of opacity for the overlay
+    // SPIKE - 002VIU
     bubble.setAttribute("aria-hidden", "true");
     document.documentElement.appendChild(bubble);
 
