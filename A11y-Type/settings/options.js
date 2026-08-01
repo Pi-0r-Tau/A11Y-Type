@@ -188,7 +188,7 @@
     function onColorPresetChange() {
         const presetName = elements.colorPreset.value;
         if (presetName === "custom") {
-            renderPresetPreview(readOverlayFromForm());
+            renderPresetPreview(optionsBindings.readOverlayFromForm(elements));
             return;
         }
 
@@ -207,7 +207,7 @@
 
     function onCustomColorChanged() {
         elements.colorPreset.value = "custom";
-        renderPresetPreview(readOverlayFromForm());
+        renderPresetPreview(optionsBindings.readOverlayFromForm(elements));
     }
 
     function onKeyCaptureDown(event) {
