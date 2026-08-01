@@ -21,7 +21,7 @@
         "src/dictionary-manager.js",
         "src/overlay.js",
         "src/fields.js",
-        "src/content-main.js"
+        "src/type-core.js"
       ],
       "run_at": "document_idle"
     }
