@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dictionary Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="page">
+    <h1>Dictionary Settings</h1>
+    <p class="hint nav-link"><a href="options.html">Back to Overlay Settings</a></p>
+
+    <section class="card">
+      <h2>Upload Dictionary</h2>
+      <p class="section-intro">Each non-empty line is treated as an entry. Multi-word entries are allowed.</p>
+      <label>
+        Dictionary display name
+        <input id="dictionaryName" type="text" placeholder="Example: Legal Terms">
+      </label>
+      <label>
+        Dictionary file (.txt)
+        <input id="dictionaryFile" type="file" accept=".txt,text/plain">
+      </label>
+      <button id="uploadButton" type="button">Upload Dictionary</button>
+    </section>
+
+    <section class="card">
+      <h2>Custom Dictionaries</h2>
+      <div id="dictionaryList" class="list"></div>
+    </section>
+
+    <section class="card">
+      <h2>Host Rules</h2>
+      <p class="section-intro">Host rules are checked top to bottom. First match is used.</p>
+      <label>
+        Site host pattern
+        <input id="hostPattern" type="text" placeholder="example.com or *.example.com">
+      </label>
+      <label>
+        Dictionary target
+        <select id="ruleTarget"></select>
+      </label>
+      <button id="addRuleButton" type="button">Add Rule</button>
+      <div id="ruleList" class="list"></div>
+    </section>
+
+    <div class="actions">
+      <button id="saveButton" type="button">Save Settings</button>
+      <button id="resetButton" type="button" class="secondary">Reset Settings</button>
+      <span id="status" aria-live="polite"></span>
+    </div>
+  </main>
+
+  <template id="tmpl-dict-row">
+    <div class="list-row">
+      <div><strong></strong><br><span class="hint"></span></div>
+      <button type="button" class="secondary">Remove</button>
+    </div>
+  </template>
+
+  <template id="tmpl-rule-row">
+    <div class="list-row">
+      <div><strong></strong><br><span class="hint"></span></div>
+      <div class="row-actions">
+        <button type="button" class="secondary">Up</button>
+        <button type="button" class="secondary">Down</button>
+        <button type="button" class="secondary">Remove</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="../src/config.js"></script>
+  <script src="options-dictionary.js"></script>
+  <script src="options-adv-renderer.js"></script>
+  <script src="options-adv.js"></script>
+</body>
+</html>
