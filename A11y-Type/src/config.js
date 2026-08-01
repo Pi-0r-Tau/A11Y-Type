@@ -227,6 +227,17 @@
         return value.length > 0 ? value[0].toUpperCase() + value.slice(1) : "";
     }
 
+    function normalizeLookupToken(value) {
+        return String(value || "")
+            .toLowerCase()
+            .replace(/[’']/g, "")
+            .replace(/æ/g, "ae")
+            .replace(/œ/g, "oe")
+            .normalize("NFKD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z]/g, "");
+    }
+
     function eventMatchesBinding(event, binding) {
         if (typeof binding !== "string" || !binding) return false;
 
@@ -279,6 +290,7 @@
     window.__DPEK__.eventMatchesAnyBinding = eventMatchesAnyBinding;
     window.__DPEK__.normalizeBindingString = normalizeBindingString;
     window.__DPEK__.normalizeEventKey = normalizeEventKey;
+    window.__DPEK__.normalizeLookupToken = normalizeLookupToken;
     window.__DPEK__.SETTINGS_STORAGE_KEY = SETTINGS_STORAGE_KEY;
     window.__DPEK__.ADVANCED_SETTINGS_STORAGE_KEY = ADVANCED_SETTINGS_STORAGE_KEY;
 })();
