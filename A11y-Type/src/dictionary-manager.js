@@ -36,27 +36,6 @@
         buildBuckets(state.dictionaryWords, state);
     }
 
-    async function loadCorrectionMap(config, state) {
-        const lines = await fetchWordFile(config.correctionsFile, false);
-        const map = new Map();
-
-        for (const line of lines) {
-            const raw = String(line || "").trim();
-            if (!raw) continue;
-
-            const parts = raw.split(/\t+/);
-            if (parts.length < 2) continue;
-
-            const sourceNorm = normalizeDictionaryToken(parts[0]);
-            const target = String(parts.slice(1).join(" ")).trim().toLowerCase();
-
-            if (!sourceNorm || target.length < 2) continue;
-            map.set(sourceNorm, target);
-        }
-
-        state.correctionMap = map;
-    }
-
     async function resolveDictionarySources(config, hostname) {
         const activeSetName = resolveDictionarySet(config, hostname);
 
@@ -128,6 +107,34 @@
 
         state.commonWordRanks = rankMap;
     }
+   // AT008
+ // So now if I type aboveboard it will automatically add a hypen on tab or the character used for autocomplete. This is because the dictionary contains both forms, and the normalized form is used for matching.
+    async function loadCorrectionMap(config, state) {
+        if (!config.correctionsFile) return;
+
+        try {
+            const fileUrl = chrome.runtime.getURL(config.correctionsFile);
+            const response = await fetch(fileUrl);
+            if (!response.ok) return;
+
+            const text = await response.text();
+            const map = new Map();
+
+            for (const line of text.split(/\r?\n/)) {
+                const tab = line.indexOf("\t");
+                if (tab === -1) continue;
+
+                const key = normalizeDictionaryToken(line.slice(0, tab));
+                const preferred = line.slice(tab + 1).trim();
+
+                if (key && preferred && !map.has(key)) {
+                    map.set(key, preferred);
+                }
+            }
+
+            state.correctionMap = map;
+        } catch (_err) { }
+    }
 
     async function fetchWordFile(relativePath, alphaOnly = true) {
         try {
@@ -182,7 +189,7 @@
     function normalizeDictionaryToken(value) {
         return String(value || "")
             .toLowerCase()
-            .replace(/[’']/g, "")
+            .replace(/['']/g, "")
             .replace(/æ/g, "ae")
             .replace(/œ/g, "oe")
             .normalize("NFKD")
@@ -193,12 +200,24 @@
     function buildBuckets(words, state) {
         const buckets = new Map();
         const records = [];
+        // AT008.1
+        // Deduplicate by normalized form to avoid duplicates in suggestions
+        // Bug in the suggestions leading to words with "'" being suggested multiple times, e.g., "don't" and "dont" 
+        // as well as multiple times in the suggestions list. This is because the dictionary contains both forms, and the normalized form is used for matching.
+        const seenNorms = new Set();  // deduplicate by normalized form
 
-        for (const word of words) {
+        const sorted = words.slice().sort((a, b) => /['']/u.test(b) - /['']/u.test(a));
+
+        for (const word of sorted) {
             const norm = normalizeDictionaryToken(word);
             if (norm.length < 2) {
                 continue;
             }
+
+            if (seenNorms.has(norm)) {
+                continue;
+            }
+            seenNorms.add(norm);
 
             const record = { word, norm };
             records.push(record);
