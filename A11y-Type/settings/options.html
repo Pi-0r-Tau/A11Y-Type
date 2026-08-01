@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A11Y Type Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="page">
+    <h1>A11Y Type Settings</h1>
+    <p class="hint nav-link"><a href="options-adv.html">Open Advanced Dictionary Settings</a></p>
+
+    <section class="card">
+      <h2>Suggestions</h2>
+      <label>
+        Number of options
+        <input id="maxSuggestions" type="number" min="1" max="12" step="1">
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>Overlay Size</h2>
+      <label>
+        Min width (px)
+        <input id="minWidth" type="number" min="160" max="600" step="1">
+      </label>
+      <label>
+        Max width (px)
+        <input id="maxWidth" type="number" min="180" max="720" step="1">
+      </label>
+      <label>
+        Border radius (px)
+        <input id="borderRadius" type="number" min="0" max="24" step="1">
+      </label>
+      <label>
+        Font size (px)
+        <input id="fontSize" type="number" min="10" max="22" step="1">
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>Overlay Colours</h2>
+      <p class="section-intro">Pick a preset for colour-vision accessibility, or choose Custom swatch and use the colour pickers.</p>
+      <label>
+        Colour preset
+        <select id="colorPreset">
+          <option value="custom">Custom</option>
+          <option value="protanopia">Protanopia-friendly</option>
+          <option value="deuteranopia">Deuteranopia-friendly</option>
+          <option value="tritanopia">Tritanopia-friendly</option>
+          <option value="highContrast">High contrast</option>
+        </select>
+      </label>
+      <div id="presetPreview" class="preset-preview" aria-hidden="true"></div>
+
+      <div class="grid-2">
+        <label class="color-field">
+          Background
+          <input id="backgroundColor" type="color">
+        </label>
+        <label class="color-field">
+          Text
+          <input id="textColor" type="color">
+        </label>
+        <label class="color-field">
+          Border
+          <input id="borderColor" type="color">
+        </label>
+        <label class="color-field">
+          Hint
+          <input id="hintColor" type="color">
+        </label>
+        <label class="color-field">
+          Active background
+          <input id="activeBackgroundColor" type="color">
+        </label>
+        <label class="color-field">
+          Active text
+          <input id="activeTextColor" type="color">
+        </label>
+        <label class="color-field">
+          Active hint
+          <input id="activeHintColor" type="color">
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Key Bindings</h2>
+      <p id="captureHint" class="section-intro capture-hint">Click a box and press the key combo you want, for example Ctrl+J, Tab, or Escape.</p>
+      <label>
+        Accept completion
+        <input id="acceptKeys" class="key-capture" type="text" readonly placeholder="Click then press a key">
+      </label>
+      <label>
+        Next suggestion
+        <input id="nextKeys" class="key-capture" type="text" readonly placeholder="Click then press a key">
+      </label>
+      <label>
+        Previous suggestion
+        <input id="previousKeys" class="key-capture" type="text" readonly placeholder="Click then press a key">
+      </label>
+      <label>
+        Dismiss overlay
+        <input id="dismissKeys" class="key-capture" type="text" readonly placeholder="Click then press a key">
+      </label>
+    </section>
+
+    <div class="actions">
+      <button id="saveButton" type="button">Save Settings</button>
+      <button id="resetButton" type="button" class="secondary">Reset Defaults</button>
+      <span id="status" aria-live="polite"></span>
+    </div>
+  </main>
+
+  <script src="../src/config.js"></script>
+  <script src="options-bindings.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
