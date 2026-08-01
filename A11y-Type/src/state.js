@@ -7,20 +7,13 @@
             suggestions: [],
             activeIndex: 0,
             lastToken: "",
-            dictionarywords: [],
+            dictionaryWords: [],
             dictionaryBuckets: new Map(),
             commonWordRanks: new Map(),
-            correctionMap: new Map(),
-            dictionaryIndex: null,
-
-            // Cache for incremental prefix typing
-            suggestionCache: {
-                lastPrefix: "",
-                lastResults: []
-            }
+            correctionMap: new Map()
         };
     }
 
-    window._DPEK_ = window._DPEK_ || {};
-    window._DPEK_.createState = createState;
+    window.__DPEK__ = window.__DPEK__ || {};
+    window.__DPEK__.createState = createState;
 })();
