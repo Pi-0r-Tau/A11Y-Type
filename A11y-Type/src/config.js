@@ -19,6 +19,13 @@
     // local storage for user config settings
     const SETTINGS_STORAGE_KEY = "dpekSettings";
     const ADVANCED_SETTINGS_STORAGE_KEY = "dpekAdvancedSettings";
+    // Maxsuggestions being 4 came from a mini research session with 4 users:
+    // Tested the min width, max width, border radius and font size
+    // Outcome was pretty clear cut, if the user wants to have a high font size the num of suggestions is best at 4 as it doesn't make the page feel crowded
+    // Also gives a bit of agency to user as they feel like the software is more responsive. With the longer a word is the more likely different tenses of that word are shown to the user
+    // Did test reducing the suggestions as well but this had the inverse impact.
+    // S002 SPIKE - 003WCS
+    // To explore the word completion suggestion column opening up to a word dictionary (actual one, explaining the word defintion)
     const defaultSettings = {
         maxSuggestions: 4,
         overlay: {
