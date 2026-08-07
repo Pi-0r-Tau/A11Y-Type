@@ -108,6 +108,11 @@
                 bubble.classList.remove("visible");
                 bubble.innerHTML = "";
             },
+            // AT012
+            // is the overlay is currently being displayed
+            isVisible() {
+                return bubble.classList.contains("visible");
+            },
 
             applySettings,
 
