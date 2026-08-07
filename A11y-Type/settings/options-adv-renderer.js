@@ -1,5 +1,23 @@
 (() => {
   "use strict";
+  // R001
+  // Refactor renderList to a generic function, simplied event listeners to closures and got rid of the heavy valdiation checks as closures will help more here.
+
+  function renderList(container, emptyHtml, templateId, items, renderRow) {
+    if (items.length === 0) {
+      container.innerHTML = emptyHtml;
+      return;
+    }
+
+    container.innerHTML = "";
+    const template = document.getElementById(templateId);
+
+    for (let i = 0; i < items.length; i++) {
+      const row = template.content.cloneNode(true);
+      renderRow(row, items[i], i);
+      container.appendChild(row);
+    }
+  }
 
   function renderTargetOptions(elements, state) {
     const options = [{ value: "general", label: "General (built-in)" }];
@@ -24,87 +42,56 @@
   }
 
   function renderDictionaryList(elements, state, helpers) {
-    if (state.customDictionaries.length === 0) {
-      elements.dictionaryList.innerHTML = '<p class="hint">No custom dictionaries uploaded yet.</p>';
-      return;
-    }
+    renderList(
+      elements.dictionaryList,
+      '<p class="hint">No custom dictionaries uploaded yet.</p>',
+      "tmpl-dict-row",
+      state.customDictionaries,
+      (row, entry, index) => {
+        const count = helpers.countEntries(entry.content);
 
-    elements.dictionaryList.innerHTML = "";
-    const tmpl = document.getElementById("tmpl-dict-row");
+        row.querySelector("strong").textContent = entry.name;
+        row.querySelector(".hint").textContent = `${count} entries`;
 
-    for (let i = 0; i < state.customDictionaries.length; i++) {
-      const entry = state.customDictionaries[i];
-      const count = helpers.countEntries(entry.content);
-
-      const row = tmpl.content.cloneNode(true);
-      row.querySelector("strong").textContent = entry.name;
-      row.querySelector(".hint").textContent = `${count} entries`;
-
-      const removeButton = row.querySelector("button");
-      removeButton.setAttribute("data-remove-dict", String(i));
-      removeButton.addEventListener("click", () => {
-        const index = Number.parseInt(removeButton.getAttribute("data-remove-dict"), 10);
-        if (!Number.isFinite(index)) {
-          return;
-        }
-
-        helpers.onRemoveDictionary(index);
-      });
-
-      elements.dictionaryList.appendChild(row);
-    }
+        const removeButton = row.querySelector("button");
+        removeButton.addEventListener("click", () => {
+          helpers.onRemoveDictionary(index);
+        });
+      }
+    );
   }
 
   function renderRuleList(elements, state, helpers) {
-    if (state.hostDictionaryRules.length === 0) {
-      elements.ruleList.innerHTML = '<p class="section-intro">No host rules yet.</p>';
-      return;
-    }
+    renderList(
+      elements.ruleList,
+      '<p class="section-intro">No host rules yet.</p>',
+      "tmpl-rule-row",
+      state.hostDictionaryRules,
+      (row, rule, index) => {
+        row.querySelector("strong").textContent = rule.hostPattern;
+        row.querySelector(".hint").textContent = rule.set;
 
-    elements.ruleList.innerHTML = "";
-    const tmpl = document.getElementById("tmpl-rule-row");
+        const [upButton, downButton, removeButton] = row.querySelectorAll("button");
 
-    for (let i = 0; i < state.hostDictionaryRules.length; i++) {
-      const rule = state.hostDictionaryRules[i];
+        upButton.addEventListener("click", () => {
+          if (index <= 0) {
+            return;
+          }
+          helpers.onMoveRule(index, index - 1);
+        });
 
-      const row = tmpl.content.cloneNode(true);
-      row.querySelector("strong").textContent = rule.hostPattern;
-      row.querySelector(".hint").textContent = rule.set;
+        downButton.addEventListener("click", () => {
+          if (index >= state.hostDictionaryRules.length - 1) {
+            return;
+          }
+          helpers.onMoveRule(index, index + 1);
+        });
 
-      const [upButton, downButton, removeButton] = row.querySelectorAll("button");
-
-      upButton.setAttribute("data-up-rule", String(i));
-      upButton.addEventListener("click", () => {
-        const index = Number.parseInt(upButton.getAttribute("data-up-rule"), 10);
-        if (!Number.isFinite(index) || index <= 0) {
-          return;
-        }
-
-        helpers.onMoveRule(index, index - 1);
-      });
-
-      downButton.setAttribute("data-down-rule", String(i));
-      downButton.addEventListener("click", () => {
-        const index = Number.parseInt(downButton.getAttribute("data-down-rule"), 10);
-        if (!Number.isFinite(index) || index >= state.hostDictionaryRules.length - 1) {
-          return;
-        }
-
-        helpers.onMoveRule(index, index + 1);
-      });
-
-      removeButton.setAttribute("data-remove-rule", String(i));
-      removeButton.addEventListener("click", () => {
-        const index = Number.parseInt(removeButton.getAttribute("data-remove-rule"), 10);
-        if (!Number.isFinite(index)) {
-          return;
-        }
-
-        helpers.onRemoveRule(index);
-      });
-
-      elements.ruleList.appendChild(row);
-    }
+        removeButton.addEventListener("click", () => {
+          helpers.onRemoveRule(index);
+        });
+      }
+    );
   }
 
   function setStatus(elements, message, isError) {
