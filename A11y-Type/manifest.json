@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "A11Y Type",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "Accessible typing assistance for any text field",
   "permissions": [
     "storage"
@@ -18,10 +18,14 @@
       "js": [
         "src/config.js",
         "src/state.js",
-        "src/dictionary-manager.js",
+        "src/dictionary/dictionary-loader.js",
+        "src/dictionary/dictionary-ranker.js",
+        "src/dictionary/dictionary-manager.js",
         "src/overlay.js",
         "src/fields.js",
-        "src/type-core.js"
+        "src/type-core-runtime/events.js",
+        "src/type-core-runtime/suggestions.js",
+        "src/type-core-runtime/bootstrap.js"
       ],
       "run_at": "document_idle"
     }
